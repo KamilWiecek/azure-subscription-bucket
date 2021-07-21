@@ -1,0 +1,27 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-20.04'
+
+variables:
+  - name: serviceConnection
+    value: SubscriptionCreation
+  - name: bucketSize
+    value: 1000
+  - name: bucketManagementGroupId
+    value: 'f44ee82e-0dd5-4fc9-8dae-3434f36d15a2' #fake data generated using New-Guid
+  - name: billingScope
+    value: '/providers/Microsoft.Billing/billingAccounts/5096629/enrollmentAccounts/764951' #fake data generated using Get-Random
+
+jobs:  
+  - job: SubscriptionCreate
+    steps:
+    - task: AzurePowerShell@5
+      displayName: 'Ensure $(bucketSize) unassigned subscriptions are in the bucket'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        ScriptType: InlineScript
+        Inline: |
+          & ./Update-AzureSubscriptionBucket.ps1 -BillingScope '$(billingScope)' -BucketManagementGroupId '$(bucketManagementGroupId)' -BucketSize '$(bucketSize)'
+        azurePowerShellVersion: LatestVersion
+        pwsh: true
