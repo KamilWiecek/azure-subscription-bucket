@@ -15,7 +15,7 @@ param
     [parameter(Mandatory = $true)]
     [ValidateSet('Production','DevTst')]
     [String]
-    $WorkloadType
+    $WorkloadType = 'Production'
 )
 
 Write-Output -InputObject '------------------------------- START -------------------------------'
