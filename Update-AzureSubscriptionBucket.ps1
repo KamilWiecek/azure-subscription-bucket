@@ -10,7 +10,12 @@ param
     
     [parameter(Mandatory = $true)]
     [Int]
-    $BucketSize
+    $BucketSize,
+
+    [parameter(Mandatory = $true)]
+    [ValidateSet('Production','DevTst')]
+    [String]
+    $WorkloadType
 )
 
 Write-Output -InputObject '------------------------------- START -------------------------------'
@@ -44,7 +49,7 @@ if ($newSubscriptionsCount -gt 0) {
         $subscriptionName = 'sub-' + ( Get-Date -Format 'yyyyMMddHHmmss' )
         Write-Output -InputObject "New subscription name is $subscriptionName"
         
-        New-AzSubscriptionAlias -AliasName $subscriptionName -SubscriptionName $subscriptionName -BillingScope $BillingScope -Workload "Production"
+        New-AzSubscriptionAlias -AliasName $subscriptionName -SubscriptionName $subscriptionName -BillingScope $BillingScope -Workload $WorkloadType
         Write-Output -InputObject "$subscriptionName created"
 
         $subscription = Get-AzSubscription -SubscriptionName $subscriptionName
